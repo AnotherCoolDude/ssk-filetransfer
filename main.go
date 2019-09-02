@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/AnotherCoolDude/proad/handler"
 	"github.com/gin-gonic/gin"
+	"path"
 )
 
 func main() {
@@ -11,6 +12,7 @@ func main() {
 
 	proad := r.Group("/")
 	proad.GET("/proad/employees", handler.GetEmployeesHandler)
+	proad.GET("/proad/projects/:urno", handler.GetProjectsHandler)
 
 	r.NoRoute(func(c *gin.Context) {
 		dir, file := path.Split(c.Request.RequestURI)

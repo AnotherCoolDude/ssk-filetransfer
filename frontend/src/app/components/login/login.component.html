@@ -1,4 +1,14 @@
-<input type="text">
+<div class="col login-container">
+    <form class="login-form">
+        <mat-form-field class="login">
+            <input matInput placeholder="Namenskürzel eingeben" [(ngModel)]="shortname" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+    </form>
+    <button mat-raised-button class="button" (click)="checkShortname()">Login</button>
+</div>
+
+
+
 
 
 

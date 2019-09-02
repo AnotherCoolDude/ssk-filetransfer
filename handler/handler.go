@@ -15,3 +15,12 @@ func GetEmployeesHandler(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, emps)
 }
+
+// GetProjectsHandler returns a projectlist for the employee identified by the parameter urno
+func GetProjectsHandler(c *gin.Context) {
+	pp := proadclient.GetProjectsForEmployee(c.Param("urno"), proadclient.StatusNone)
+	if len(pp.Projects) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "projectList is empty"})
+	}
+	c.JSON(http.StatusOK, pp)
+}
