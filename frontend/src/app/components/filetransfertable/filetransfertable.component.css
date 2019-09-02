@@ -1,5 +1,11 @@
-.project-table {
-    margin: 20px;
+.table-container {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.projects-table {
+    width: 100%;
 }
 
 ng-container {

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/AnotherCoolDude/proad/handler"
-	"github.com/gin-gonic/gin"
 	"path"
+
+	"github.com/AnotherCoolDude/ssk-filetransfer/handler"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {

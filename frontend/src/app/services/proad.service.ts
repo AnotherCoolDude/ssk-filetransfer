@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Employee } from '../model/employee';
 import { environment } from 'src/environments/environment';
-import { Project } from '../model/projects';
+import { Project } from '../model/project';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +47,7 @@ export class ProadService {
   getProjectsForEmployee(urno: number): Observable<Project[]> {
     if (!this.projectdataChanged) {
       return new Observable((obs) => {
+        console.log(this.cachedProjects);
         obs.next(this.cachedProjects);
         obs.complete();
       });

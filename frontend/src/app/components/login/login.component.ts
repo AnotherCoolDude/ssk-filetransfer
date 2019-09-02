@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
       const ee = this.employeeList.filter(e => e.shortname === this.shortname);
       if (ee.length === 1) {
         console.log(ee[0]);
+        this.proadService.dataHasChanged();
         this.router.navigate(['/filetransfertable/' + ee[0].urno])
           .then((result: boolean) => console.log(result));
       }

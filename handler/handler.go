@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"github.com/AnotherCoolDude/proad/proadclient"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/AnotherCoolDude/ssk-filetransfer/proadclient"
+	"github.com/gin-gonic/gin"
 )
 
 // GetEmployeesHandler returns all active proad employees
