@@ -73,11 +73,12 @@ export class ProadService {
         obs.complete();
       });
     }
-    const params = new HttpParams();
-    params.set('status', String(code));
-    params.set('startDate', this.ISODateString(startDate));
-    params.set('endDate', this.ISODateString(endDate));
-    return this.httpClient.get(environment.gateway + '/proad/projects', {params}).pipe(
+    let filterParams = new HttpParams();
+    filterParams = filterParams.append('status', String(code));
+    filterParams = filterParams.append('startDate', this.ISODateString(startDate));
+    filterParams = filterParams.append('endDate', this.ISODateString(endDate));
+    console.log(filterParams.toString());
+    return this.httpClient.get(environment.gateway + '/proad/projects', {params: filterParams}).pipe(
       map((projectList: any) => {
         const pp: Project[] = [];
         for (const p of projectList.project_list) {

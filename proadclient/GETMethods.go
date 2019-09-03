@@ -1,10 +1,6 @@
 package proadclient
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"net/http"
 	"time"
 )
 
@@ -54,39 +50,4 @@ func GetProjects(code StatusCode, startDate, endDate time.Time) *ProjectList {
 	req := makeFilteredGetRequest("projects", code, startDate, endDate)
 	unmarshalResponse(req, &pl)
 	return &pl
-}
-
-func makeFilteredGetRequest(path string, code StatusCode, startDate, endDate time.Time) *http.Request {
-	q := queryPair{
-		key:   "from_date",
-		value: startDate.Format(proadTimeFormat) + "-" + endDate.Format(proadTimeFormat),
-	}
-	return makeGETRequest(path, queryMap(code, q))
-}
-
-func queryMap(code StatusCode, pairs ...queryPair) map[string]string {
-	sMap := map[string]string{}
-	if code != StatusNone {
-		sMap["status"] = code.String()
-	}
-	for _, qP := range pairs {
-		sMap[qP.key] = qP.value
-	}
-	return sMap
-}
-
-func unmarshalResponse(request *http.Request, v interface{}) {
-	resp := Client.Do(request)
-	respBodyBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Printf("[proadclient/emplyees.go] error: %s\n", err.Error())
-		return
-	}
-	defer resp.Body.Close()
-
-	err = json.Unmarshal(respBodyBytes, &v)
-	if err != nil {
-		fmt.Printf("[proadclient/emplyees.go] error: %s\n", err.Error())
-		return
-	}
 }
