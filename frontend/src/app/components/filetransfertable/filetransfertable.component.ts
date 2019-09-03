@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { ProadService } from 'src/app/services/proad.service';
+import { ProadService, StatusCode } from 'src/app/services/proad.service';
 import { switchMap } from 'rxjs/operators';
 import { Project } from 'src/app/model/project';
 import { Observable } from 'rxjs';
@@ -46,10 +46,14 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
         default: return item[property];
       }
     };
+    const eDate = new Date();
+    const sDate = new Date();
+    sDate.setFullYear(2018);
     this.projects$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
         this.employeeUrno = +params.get('urno');
-        return this.proadService.getProjectsForEmployee( +params.get('urno'));
+        return this.proadService.getFilteredProjects(StatusCode.none, sDate, eDate);
+        // return this.proadService.getProjectsForEmployee( +params.get('urno'));
       })
     );
     this.employees$ = this.proadService.getEmployees();

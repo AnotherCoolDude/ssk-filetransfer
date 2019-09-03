@@ -5,6 +5,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
+)
+
+type queryPair struct {
+	key, value string
+}
+
+const (
+	proadTimeFormat = "2006-01-02"
 )
 
 // GetEmployees returns a map where the key is the emplyees shortname and the values his/her urno
@@ -18,11 +27,7 @@ func GetEmployees() EmployeeList {
 // GetProjectsForEmployee returns a ProjectList for emplyee specified by urno
 func GetProjectsForEmployee(urno string, status StatusCode) *ProjectList {
 	var pl ProjectList
-	statusMap := map[string]string{}
-	if status != StatusNone {
-		statusMap["status"] = status.String()
-	}
-	req := makeGETRequest("staffs/"+urno+"/projects", statusMap)
+	req := makeGETRequest("staffs/"+urno+"/projects", queryMap(status))
 	unmarshalResponse(req, &pl)
 	return &pl
 }
@@ -30,13 +35,44 @@ func GetProjectsForEmployee(urno string, status StatusCode) *ProjectList {
 // GetTasksForEmployee returns a list of Tasks für employee with identifier urno
 func GetTasksForEmployee(urno string, status StatusCode) *TaskList {
 	var tl TaskList
-	statusMap := map[string]string{}
-	if status != StatusNone {
-		statusMap["status"] = status.String()
-	}
-	req := makeGETRequest("staffs/"+urno+"/tasks", statusMap)
+	req := makeGETRequest("staffs/"+urno+"/tasks", queryMap(status))
 	unmarshalResponse(req, &tl)
 	return &tl
+}
+
+// GetTasks returns tasks filtered by status and date
+func GetTasks(code StatusCode, startDate, endDate time.Time) *TaskList {
+	var tl TaskList
+	req := makeFilteredGetRequest("tasks", code, startDate, endDate)
+	unmarshalResponse(req, &tl)
+	return &tl
+}
+
+// GetProjects returns projects filtered by status and date
+func GetProjects(code StatusCode, startDate, endDate time.Time) *ProjectList {
+	var pl ProjectList
+	req := makeFilteredGetRequest("projects", code, startDate, endDate)
+	unmarshalResponse(req, &pl)
+	return &pl
+}
+
+func makeFilteredGetRequest(path string, code StatusCode, startDate, endDate time.Time) *http.Request {
+	q := queryPair{
+		key:   "from_date",
+		value: startDate.Format(proadTimeFormat) + "-" + endDate.Format(proadTimeFormat),
+	}
+	return makeGETRequest(path, queryMap(code, q))
+}
+
+func queryMap(code StatusCode, pairs ...queryPair) map[string]string {
+	sMap := map[string]string{}
+	if code != StatusNone {
+		sMap["status"] = code.String()
+	}
+	for _, qP := range pairs {
+		sMap[qP.key] = qP.value
+	}
+	return sMap
 }
 
 func unmarshalResponse(request *http.Request, v interface{}) {

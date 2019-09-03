@@ -11,9 +11,10 @@ func main() {
 	r := gin.Default()
 	r.Use(corsMiddleware())
 
-	proad := r.Group("/")
-	proad.GET("/proad/employees", handler.GetEmployeesHandler)
-	proad.GET("/proad/projects/:urno", handler.GetProjectsHandler)
+	proad := r.Group("/proad")
+	proad.GET("/employees", handler.GetEmployeesHandler)
+	proad.GET("/projects/:urno", handler.GetProjectsByEmployeeHandler)
+	proad.GET("/projects", handler.GetFilteredProjects)
 
 	r.NoRoute(func(c *gin.Context) {
 		dir, file := path.Split(c.Request.RequestURI)

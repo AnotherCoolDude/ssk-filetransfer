@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Employee } from '../model/employee';
@@ -65,4 +65,64 @@ export class ProadService {
     );
   }
 
+  getFilteredProjects(code: StatusCode, startDate: Date, endDate: Date): Observable<Project[]> {
+    if (!this.projectdataChanged) {
+      return new Observable((obs) => {
+        console.log(this.cachedProjects);
+        obs.next(this.cachedProjects);
+        obs.complete();
+      });
+    }
+    const params = new HttpParams();
+    params.set('status', String(code));
+    params.set('startDate', this.ISODateString(startDate));
+    params.set('endDate', this.ISODateString(endDate));
+    return this.httpClient.get(environment.gateway + '/proad/projects', {params}).pipe(
+      map((projectList: any) => {
+        const pp: Project[] = [];
+        for (const p of projectList.project_list) {
+          pp.push(p);
+        }
+        this.cachedProjects = pp;
+        this.projectdataChanged = false;
+        return pp;
+      })
+    );
+  }
+
+
+  private ISODateString(d: Date) {
+    function pad(n: number) {return n < 10 ? '0' + n : n; }
+    return d.getUTCFullYear() + '-'
+         + pad(d.getUTCMonth() + 1) + '-'
+         + pad(d.getUTCDate()) + 'T'
+         + pad(d.getUTCHours()) + ':'
+         + pad(d.getUTCMinutes()) + ':'
+         + pad(d.getUTCSeconds()) + 'Z'; }
+
+}
+
+export enum StatusCode {
+  // StatusNone does not filter any StatusCode
+  none = 0,
+  // StatusVorbereitung 100
+  vorbereitung = 100,
+  // StatusAngebot 200
+  angebot = 200,
+  // StatusDurchführung 300
+  durchführung = 300,
+  // StatusDurchführungTE Durchführung Teilabrechnung erfolgt 301
+  durchführungTE = 301,
+  // StatusGeliefert 400
+  geliefert = 400,
+  // StatusAbgerechnet 500
+  abgerechnet = 500,
+  // StatusAbgerechnetVP Abgerechnet - Verrechnung mit anderem Project 501
+  abgerechnetVP = 501,
+  // StatusAbgebrochen 600
+  abgebrochen = 600,
+  // StatusAbgebrochenNR Abgebrochen - nicht realisiert 601
+  abgebrochenNR = 601,
+  // StatusAbgebrochenNW Abgebrochen - nicht weiterberechenbar 602
+  abgebrochenNW = 602,
 }

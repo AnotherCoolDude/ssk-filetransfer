@@ -36,3 +36,31 @@ const (
 func (s StatusCode) String() string {
 	return strconv.Itoa(int(s))
 }
+
+// Code returns the statuscode for the given int
+func Code(statusInt int) StatusCode {
+	switch statusInt {
+	case 100:
+		return StatusVorbereitung
+	case 200:
+		return StatusAngebot
+	case 300:
+		return StatusDurchführung
+	case 301:
+		return StatusDurchführungTE
+	case 400:
+		return StatusGeliefert
+	case 500:
+		return StatusAbgerechnet
+	case 501:
+		return StatusAbgerechnetVP
+	case 600:
+		return StatusAbgebrochen
+	case 601:
+		return StatusAbgebrochenNR
+	case 602:
+		return StatusAbgebrochenNW
+	default:
+		return StatusNone
+	}
+}

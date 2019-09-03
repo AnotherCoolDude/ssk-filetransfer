@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProadService } from 'src/app/services/proad.service';
+import { ProadService, StatusCode } from 'src/app/services/proad.service';
 import { Employee } from 'src/app/model/employee';
 import { Router } from '@angular/router';
 
