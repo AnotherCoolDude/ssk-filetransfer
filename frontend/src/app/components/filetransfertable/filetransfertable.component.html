@@ -1,27 +1,31 @@
-<mat-form-field class="table-container">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-</mat-form-field>
+<app-filterbar #filterbar (filterdatachanged)="filterChanged($event)"></app-filterbar>
 
 <div class="mat-elevation-z8 project-table table-container">
-<table mat-table [dataSource]="dataSource" matSort class="projects-table">
-    
-    <ng-container matColumnDef="Jobnr">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Jobnr </th>
-        <td mat-cell *matCellDef="let project"> {{ project.projectno }} </td>
-    </ng-container>
+    <table mat-table [dataSource]="dataSource" matSort class="projects-table">
 
-    <ng-container matColumnDef="Project name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project name </th>
-            <td mat-cell *matCellDef="let project"> {{ project.project_name }} </td>
-    </ng-container>
+        <ng-container matColumnDef="Jobnr">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Jobnr </th>
+            <td mat-cell *matCellDef="let project" class="mediumCol"> {{ project.projectno }} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="status">
+        <ng-container matColumnDef="Projektname">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Projektname </th>
+            <td mat-cell *matCellDef="let project" class="wideCol"> {{ project.project_name }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Auftragsdatum">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Auftragsdatum </th>
+            <td mat-cell *matCellDef="let project" class="mediumCol">
+                {{ project.order_date | date: 'longDate' : '' : 'de' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-            <td mat-cell *matCellDef="let project"> {{ project.status }} </td>
-    </ng-container>
+            <td mat-cell *matCellDef="let project" class="smallCol"> {{ project.status }} </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </div>

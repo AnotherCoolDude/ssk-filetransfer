@@ -1,0 +1,14 @@
+.table-container {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.filter-field {
+    width: 70%;
+}
+
+.datepicker-field {
+    width: 15%;
+    padding-left: 2%;
+}

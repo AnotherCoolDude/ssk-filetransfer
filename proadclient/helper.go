@@ -13,7 +13,7 @@ import (
 func makeGETRequest(relURL string, query map[string]string) *http.Request {
 	req, err := http.NewRequest("GET", BaseURL+relURL, http.NoBody)
 	if err != nil {
-		fmt.Printf("[proadclient/emplyees.go] error: %s\n", err.Error())
+		fmt.Printf("[proadclient/helper.go/makeGETRequest] error: %s\n", err.Error())
 		return &http.Request{}
 	}
 	q := req.URL.Query()
@@ -54,14 +54,14 @@ func unmarshalResponse(request *http.Request, v interface{}) {
 	resp := Client.Do(request)
 	respBodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Printf("[proadclient/emplyees.go] error: %s\n", err.Error())
+		fmt.Printf("[proadclient/helper.go/unmarshalResponse] error: %s\n", err.Error())
 		return
 	}
 	defer resp.Body.Close()
 
 	err = json.Unmarshal(respBodyBytes, &v)
 	if err != nil {
-		fmt.Printf("[proadclient/emplyees.go] error: %s\n", err.Error())
+		fmt.Printf("[proadclient/helper.go/unmarshalResponse] error: %s\n", err.Error())
 		return
 	}
 }

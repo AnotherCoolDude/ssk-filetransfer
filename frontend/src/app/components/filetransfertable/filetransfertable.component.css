@@ -8,6 +8,14 @@
     width: 100%;
 }
 
-ng-container {
-    margin: 5px;
+.wideCol {
+    width: 45%;
+}
+
+.mediumCol {
+    width: 25%;
+}
+
+.smallCol {
+    width: 5%;
 }

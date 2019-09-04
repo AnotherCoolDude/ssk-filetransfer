@@ -15,28 +15,39 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { FilterbarComponent } from './components/filterbar/filterbar.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DATE_LOCALE } from '@angular/material';
+import { MatNativeDateModule } from '@angular/material/core';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+
+registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    FiletransfertableComponent
+    FiletransfertableComponent,
+    FilterbarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatInputModule,
     FormsModule,
+    HttpClientModule,
+    MatInputModule,
     MatButtonModule,
     MatMenuModule,
     MatToolbarModule,
-    HttpClientModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'de' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -12,4 +12,5 @@ type Project struct {
 	Title       string `json:"project_name"`
 	Jobnr       string `json:"projectno"`
 	Description string `json:"description"`
+	OrderDate   string `json:"order_date"`
 }

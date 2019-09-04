@@ -1,0 +1,19 @@
+<div class="table-container">
+    <mat-form-field class="filter-field">
+        <input matInput (keyup)="filterdataChanged()" placeholder="Filter" [(ngModel)]="filterText">
+    </mat-form-field>
+
+    <mat-form-field class="datepicker-field">
+        <input matInput [matDatepicker]="startDatepicker" placeholder="start date" [(ngModel)]="startDate"
+            (dateChange)="filterdataChanged()" (dateInput)="filterdataChanged()">
+        <mat-datepicker-toggle matSuffix [for]="startDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatepicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="datepicker-field">
+        <input matInput [matDatepicker]="endDatepicker" placeholder="end date" [(ngModel)]="endDate"
+            (dateChange)="filterdataChanged()" (dateInput)="filterdataChanged()">
+        <mat-datepicker-toggle matSuffix [for]="endDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatepicker></mat-datepicker>
+    </mat-form-field>
+</div>
