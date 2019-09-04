@@ -9,7 +9,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { FilterbarComponent, Filterdata } from '../filterbar/filterbar.component';
-import { filter } from 'minimatch';
 
 @Component({
   selector: 'app-filetransfertable',
@@ -30,7 +29,6 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Project>();
 
   constructor(
-    private route: ActivatedRoute,
     private proadService: ProadService,
   ) { }
 

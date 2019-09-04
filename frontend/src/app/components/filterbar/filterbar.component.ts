@@ -16,7 +16,9 @@ export class FilterbarComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {  }
+  ngOnInit() {
+    this.filterText = '';
+  }
 
   filterdataChanged() {
     this.filterdatachanged.emit(new Filterdata(this.filterText, this.startDate, this.endDate));
