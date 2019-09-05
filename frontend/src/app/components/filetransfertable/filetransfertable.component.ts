@@ -1,7 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ProadService, StatusCode } from 'src/app/services/proad.service';
-import { switchMap } from 'rxjs/operators';
 import { Project } from 'src/app/model/project';
 import { Observable } from 'rxjs';
 import { Employee } from 'src/app/model/employee';
@@ -9,11 +7,19 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { FilterbarComponent, Filterdata } from '../filterbar/filterbar.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-filetransfertable',
   templateUrl: './filetransfertable.component.html',
-  styleUrls: ['./filetransfertable.component.css']
+  styleUrls: ['./filetransfertable.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class FiletransfertableComponent implements OnInit, AfterViewInit {
 
@@ -27,6 +33,7 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [ 'Jobnr', 'Projektname', 'Auftragsdatum', 'Status' ];
   dataSource = new MatTableDataSource<Project>();
+  expandedProject: Project | null;
 
   constructor(
     private proadService: ProadService,
@@ -65,7 +72,7 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
     };
     const eDate = new Date();
     const sDate = new Date();
-    sDate.setFullYear(eDate.getFullYear() - 1);
+    sDate.setMonth(0);
     this.filterbar.startDate = sDate;
     this.filterbar.endDate = eDate;
     this.projects$ = this.proadService.getFilteredProjects(StatusCode.none, sDate, eDate);
@@ -81,5 +88,4 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
     console.log(filterstring);
     this.dataSource.filter = filterstring;
   }
-
 }

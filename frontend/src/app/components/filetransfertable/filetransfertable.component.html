@@ -1,7 +1,7 @@
 <app-filterbar #filterbar (filterdatachanged)="filterChanged($event)"></app-filterbar>
 
 <div class="mat-elevation-z8 project-table table-container">
-    <table mat-table [dataSource]="dataSource" matSort class="projects-table">
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort class="projects-table">
 
         <ng-container matColumnDef="Jobnr">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Jobnr </th>
@@ -24,8 +24,25 @@
             <td mat-cell *matCellDef="let project" class="smallCol"> {{ project.status }} </td>
         </ng-container>
 
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let project" [attr.colspan]="displayedColumns.length">
+                <div class="project-detail" [@detailExpand]="project == expandedProject ? 'expanded' : 'collapsed'"
+                    (@detailExpand.start)="animStart($event)" (@detailExpand.done)="animStart($event)">
+                    <div class="project-description">
+                        {{ project.description }}
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let project; columns: displayedColumns;" class="project-row"
+            [class.expanded-row]="expandedProject === project"
+            (click)="expandedProject = expandedProject === project ? null : project">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row">
+        </tr>
+
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </div>

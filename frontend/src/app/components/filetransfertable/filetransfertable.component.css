@@ -1,21 +1,51 @@
 .table-container {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .projects-table {
-    width: 100%;
+  width: 100%;
 }
 
 .wideCol {
-    width: 45%;
+  width: 45%;
 }
 
 .mediumCol {
-    width: 25%;
+  width: 25%;
 }
 
 .smallCol {
-    width: 5%;
+  width: 5%;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.project-row:not(.expanded-row):hover {
+  background: #777;
+}
+
+tr.project-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.project-row td {
+  border-bottom-width: 0;
+}
+
+.project-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.project-description {
+    min-height: 20px;
+    padding: 16px;
+  }
+
+.project-description-attribution {
+    opacity: 0.5;
 }
