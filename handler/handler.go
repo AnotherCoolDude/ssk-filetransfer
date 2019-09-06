@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"github.com/AnotherCoolDude/ssk-filetransfer/filemanagement"
 	"net/http"
 	"strconv"
 	"time"
@@ -36,6 +37,18 @@ func GetFilteredProjects(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "projectList is empty"})
 	}
 	c.JSON(http.StatusOK, pp)
+}
+
+// GetContentForProject returns the contents for a project
+func GetContentForProject(c *gin.Context) {
+	prnr := c.Query("projectnr")
+	if prnr == "" {
+		fmt.Println("couldn't extract Projectnumber")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't extract project number"})
+	}
+	paths := filemanagement.FindPathsForProject(filemanagement.PathDaten, prnr)
+	files := filemanagement.ListContentForPaths(paths)
+	c.JSON(http.StatusOK, files)
 }
 
 // GetFilteredTasks returns projects filtered by query params

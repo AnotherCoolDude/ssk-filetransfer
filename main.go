@@ -16,6 +16,9 @@ func main() {
 	proad.GET("/projects/:urno", handler.GetProjectsByEmployeeHandler)
 	proad.GET("/projects", handler.GetFilteredProjects)
 
+	files := r.Group("/files")
+	files.GET("/project", handler.GetContentForProject)
+
 	r.NoRoute(func(c *gin.Context) {
 		dir, file := path.Split(c.Request.RequestURI)
 		ext := path.Ext(file)

@@ -23,15 +23,15 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class FiletransfertableComponent implements OnInit, AfterViewInit {
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(FilterbarComponent, {static: true}) filterbar: FilterbarComponent;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(FilterbarComponent, { static: true }) filterbar: FilterbarComponent;
 
   projects$: Observable<Project[]>;
   employees$: Observable<Employee[]>;
   employeeUrno: number;
 
-  displayedColumns: string[] = [ 'Jobnr', 'Projektname', 'Auftragsdatum', 'Status' ];
+  displayedColumns: string[] = ['Jobnr', 'Projektname', 'Auftragsdatum', 'Status'];
   dataSource = new MatTableDataSource<Project>();
   expandedProject: Project | null;
 
@@ -40,7 +40,22 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
-    this.projects$.subscribe(pp => this.dataSource.data = pp);
+    this.projects$.subscribe(pp => {
+      // for (const p of pp) {
+      //   this.proadService.getContentForProject(p.projectno).subscribe(content => p.content = content);
+      // }
+      this.dataSource.data = pp;
+    });
+
+    this.dataSource.connect().subscribe(pp => {
+      for (const p of pp) {
+        if (!p.content) {
+          this.proadService.getContentForProject(p.projectno).subscribe(cc => {
+            p.content = cc;
+          });
+        }
+      }
+    });
   }
 
   ngOnInit() {
@@ -57,7 +72,7 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
     this.dataSource.filterPredicate = (project, filterstring) => {
       const splittedFilterstring = filterstring.split('#date:');
       const stringToFilter = (project.description.trim()
-      + project.project_name.trim() + project.status.trim() + project.projectno.trim()).toLowerCase();
+        + project.project_name.trim() + project.status.trim() + project.projectno.trim()).toLowerCase();
       if (stringToFilter.indexOf(splittedFilterstring[0]) !== -1) {
         const datestrings = splittedFilterstring[1].split(' ');
         const start = new Date(datestrings[0]);
@@ -72,19 +87,23 @@ export class FiletransfertableComponent implements OnInit, AfterViewInit {
     };
     const eDate = new Date();
     const sDate = new Date();
-    sDate.setMonth(0);
+    sDate.setMonth(5);
     this.filterbar.startDate = sDate;
     this.filterbar.endDate = eDate;
     this.projects$ = this.proadService.getFilteredProjects(StatusCode.none, sDate, eDate);
     this.employees$ = this.proadService.getEmployees();
   }
 
+  rowClicked(project: Project) {
+    this.expandedProject = this.expandedProject === project ? null : project;
+  }
+
   filterChanged(filterdata: Filterdata) {
     const filterstring = filterdata.text.trim().toLowerCase()
-    + '#date:'
-    + filterdata.startDate.toISOString()
-    + ' '
-    + filterdata.endDate.toISOString();
+      + '#date:'
+      + filterdata.startDate.toISOString()
+      + ' '
+      + filterdata.endDate.toISOString();
     console.log(filterstring);
     this.dataSource.filter = filterstring;
   }

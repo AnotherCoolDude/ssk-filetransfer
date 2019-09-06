@@ -7,5 +7,6 @@ export class Project {
     order_date: Date;
     projectno: string;
     description: string;
+    content: string[];
 }
 

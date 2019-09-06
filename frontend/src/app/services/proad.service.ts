@@ -77,8 +77,7 @@ export class ProadService {
     filterParams = filterParams.append('status', String(code));
     filterParams = filterParams.append('startDate', this.ISODateString(startDate));
     filterParams = filterParams.append('endDate', this.ISODateString(endDate));
-    console.log(filterParams.toString());
-    return this.httpClient.get(environment.gateway + '/proad/projects', {params: filterParams}).pipe(
+    return this.httpClient.get(environment.gateway + '/proad/projects', { params: filterParams }).pipe(
       map((projectList: any) => {
         const pp: Project[] = [];
         for (const p of projectList.project_list) {
@@ -91,15 +90,21 @@ export class ProadService {
     );
   }
 
+  getContentForProject(projectnr: string): Observable<string[]> {
+    let prnrParam = new HttpParams();
+    prnrParam = prnrParam.append('projectnr', projectnr);
+    return this.httpClient.get<string[]>(environment.gateway + '/files/project', {params: prnrParam});
+  }
 
   private ISODateString(d: Date) {
-    function pad(n: number) {return n < 10 ? '0' + n : n; }
+    function pad(n: number) { return n < 10 ? '0' + n : n; }
     return d.getUTCFullYear() + '-'
-         + pad(d.getUTCMonth() + 1) + '-'
-         + pad(d.getUTCDate()) + 'T'
-         + pad(d.getUTCHours()) + ':'
-         + pad(d.getUTCMinutes()) + ':'
-         + pad(d.getUTCSeconds()) + 'Z'; }
+      + pad(d.getUTCMonth() + 1) + '-'
+      + pad(d.getUTCDate()) + 'T'
+      + pad(d.getUTCHours()) + ':'
+      + pad(d.getUTCMinutes()) + ':'
+      + pad(d.getUTCSeconds()) + 'Z';
+  }
 
 }
 
