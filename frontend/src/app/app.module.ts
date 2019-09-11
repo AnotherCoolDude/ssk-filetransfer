@@ -21,6 +21,7 @@ import { MAT_DATE_LOCALE } from '@angular/material';
 import { MatNativeDateModule } from '@angular/material/core';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { BascamptableComponent } from './components/bascamptable/bascamptable.component';
 
 registerLocaleData(localeDe);
 
@@ -29,7 +30,8 @@ registerLocaleData(localeDe);
     AppComponent,
     LoginComponent,
     FiletransfertableComponent,
-    FilterbarComponent
+    FilterbarComponent,
+    BascamptableComponent
   ],
   imports: [
     BrowserModule,

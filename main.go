@@ -11,6 +11,8 @@ func main() {
 	r := gin.Default()
 	r.Use(corsMiddleware())
 
+	r.GET("/callback", handler.BCCallbackhandler)
+
 	proad := r.Group("/proad")
 	proad.GET("/employees", handler.GetEmployeesHandler)
 	proad.GET("/projects/:urno", handler.GetProjectsByEmployeeHandler)
@@ -18,6 +20,11 @@ func main() {
 
 	files := r.Group("/files")
 	files.GET("/project", handler.GetContentForProject)
+
+	basecamp := r.Group("/bc")
+	basecamp.GET("/valid", handler.BCTokenValidHandler)
+	basecamp.GET("/login", handler.BCLoginhandler)
+	basecamp.GET("/projects", handler.BCGetProjects)
 
 	r.NoRoute(func(c *gin.Context) {
 		dir, file := path.Split(c.Request.RequestURI)
