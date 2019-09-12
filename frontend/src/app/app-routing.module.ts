@@ -7,7 +7,7 @@ import { BascamptableComponent } from './components/bascamptable/bascamptable.co
 const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'filetransfertable/:urno', component: FiletransfertableComponent},
-  {path: 'basecamptable', component: BascamptableComponent},
+  {path: 'basecamptable/:shortname', component: BascamptableComponent},
 ];
 
 @NgModule({

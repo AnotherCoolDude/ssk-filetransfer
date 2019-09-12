@@ -4,6 +4,7 @@ import (
 	"path"
 
 	"github.com/AnotherCoolDude/ssk-filetransfer/handler"
+	"github.com/AnotherCoolDude/ssk-filetransfer/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,6 +23,7 @@ func main() {
 	files.GET("/project", handler.GetContentForProject)
 
 	basecamp := r.Group("/bc")
+	basecamp.Use(middleware.BCVerifyClient())
 	basecamp.GET("/valid", handler.BCTokenValidHandler)
 	basecamp.GET("/login", handler.BCLoginhandler)
 	basecamp.GET("/projects", handler.BCGetProjects)

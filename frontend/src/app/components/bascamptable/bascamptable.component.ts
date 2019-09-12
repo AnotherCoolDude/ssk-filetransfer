@@ -5,6 +5,7 @@ import { FilterbarComponent, Filterdata } from '../filterbar/filterbar.component
 import { Project, Basecampproject } from 'src/app/model/project';
 import { BasecampService } from 'src/app/services/basecamp.service';
 import { Observable } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -25,12 +26,15 @@ export class BascamptableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(FilterbarComponent, { static: true }) filterbar: FilterbarComponent;
 
-  constructor(private basecampservice: BasecampService) { }
+  constructor(
+    private basecampservice: BasecampService,
+    private route: ActivatedRoute) { }
 
   displayedColumns: string[] = ['status', 'name', 'purpose'];
   dataSource = new MatTableDataSource<Basecampproject>();
   expandedProject: Basecampproject | null;
   basecampprojects$: Observable<Basecampproject[]>;
+  shortname = "";
 
 
   ngAfterViewInit() {
@@ -39,6 +43,8 @@ export class BascamptableComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    this.shortname = this.route.snapshot.paramMap.get('shortname');
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
@@ -59,7 +65,7 @@ export class BascamptableComponent implements OnInit, AfterViewInit {
       return false;
     };
 
-    this.basecampprojects$ = this.basecampservice.projects();
+    this.basecampprojects$ = this.basecampservice.projects(this.shortname);
   }
 
   rowClicked(project: Basecampproject) {

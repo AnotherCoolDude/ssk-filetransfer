@@ -6,6 +6,7 @@ import (
 
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/rs/xid"
 	"golang.org/x/oauth2"
@@ -46,6 +47,7 @@ type Basecampclient struct {
 func new(clientID, clientSecret, email, appName, callbackURL string) *Basecampclient {
 	c := &Basecampclient{
 		appName: appName,
+		email:   email,
 		id:      0,
 		state:   xid.New().String(),
 		code:    "",
@@ -127,14 +129,16 @@ func (c *Basecampclient) ReceiveID() {
 		return
 	}
 	defer resp.Body.Close()
+	fmt.Println(string(respbytes))
 	var result map[string]interface{}
 	err = json.Unmarshal(respbytes, &result)
 	if err != nil {
 		fmt.Println("[basecampclient/client.go/handleCallback] couldn't umarshal response body")
 		return
 	}
-	identity := result["identity"].(map[string]interface{})
-	c.id = int(identity["id"].(float64))
+	accounts := result["accounts"].([]interface{})
+	accDetails := accounts[0].(map[string]interface{})
+	c.id = int(accDetails["id"].(float64))
 }
 
 // TokenValid reports wether the token is non-nil and not expired
@@ -150,12 +154,22 @@ func (c *Basecampclient) RefreshToken() {
 	fmt.Println(c.token.RefreshToken)
 }
 
+//IDValid checks wether the client's id is valid
+func (c *Basecampclient) IDValid() bool {
+	if c.id == 0 {
+		return false
+	}
+	return true
+}
+
 func (c *Basecampclient) addHeader(request *http.Request) {
 	request.Header.Add("Authorization", "Bearer "+c.token.AccessToken)
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("User-Agent", fmt.Sprintf("%s (%s)", c.appName, c.email))
 }
 
-func (c *Basecampclient) baseURL() string {
-	return fmt.Sprintf("https://3.basecampapi.com/%d/", c.id)
+func (c *Basecampclient) baseURL() *url.URL {
+	urlString := fmt.Sprintf("https://3.basecampapi.com/%d/", c.id)
+	url, _ := url.Parse(urlString)
+	return url
 }
