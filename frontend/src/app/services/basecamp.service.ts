@@ -3,7 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Basecampproject, Todoset } from '../model/project';
+import { Basecampproject } from '../model/project';
+import { Todoset } from '../model/todoset';
+import { Todolist } from '../model/todolist';
+import { Todo } from '../model/todo';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +49,6 @@ export class BasecampService {
   projects(shortname: string): Observable<Basecampproject[]> {
     return this.httpClient.get<Basecampproject[]>(environment.gateway + '/bc/projects', {params: {['shortname']: shortname}}).pipe(
       map((obj: any) => {
-        console.log(obj);
         const pp: Basecampproject[] = [];
         for (const d of obj) {
           pp.push(new Basecampproject(d));
@@ -56,8 +58,18 @@ export class BasecampService {
     );
   }
 
-  todoset(link: string, shortname: string): Observable<Todoset[]> {
-    return this.httpClient.get<Todoset[]>(environment.gateway + '/bc/link', {params: {['shortname']: shortname, ['link']: link }});
+  todoset(link: string, shortname: string): Observable<Todoset> {
+    return this.httpClient.get<Todoset>(environment.gateway + '/bc/link', {params: {['shortname']: shortname, ['link']: link }});
+  }
+
+  todolists(link: string, shortname: string): Observable<Todolist[]> {
+    return this.httpClient.get<Todolist[]>(environment.gateway + '/bc/link', {params: {['shortname']: shortname, ['link']: link }});
+  }
+
+  todos(link: string, shortname: string): Observable<Todo[]> {
+    return this.httpClient.get<Todo[]>(environment.gateway + '/bc/link', {params: {['shortname']: shortname, ['link']: link }}).pipe(
+      map(tt => { console.log(tt); return tt; })
+    );
   }
 
 

@@ -6,6 +6,8 @@ import { Project, Basecampproject } from 'src/app/model/project';
 import { BasecampService } from 'src/app/services/basecamp.service';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
+import { mergeMap, map, reduce, switchMap, concatMap } from 'rxjs/operators';
+import { Todo } from 'src/app/model/todo';
 
 
 @Component({
@@ -38,20 +40,20 @@ export class BascamptableComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-   this.basecampprojects$.subscribe(pp => this.dataSource.data = pp);
+    this.basecampprojects$.subscribe(pp => this.dataSource.data = pp);
 
-   this.dataSource.connect().subscribe(pp => {
-     for (const p of pp) {
-       if (!p.todosets) {
-          this.basecampservice
-            .todoset(p.dock.url.toString(), this.shortname)
-            .subscribe(sets => {
-              console.log(sets);
-              p.todosets = sets;
-            });
-       }
-     }
-   });
+    this.dataSource.connect().subscribe(pp => {
+      for (const p of pp) {
+        if (p.todos.length > 0) {
+          return;
+        }
+        this.basecampservice.todoset(p.url.toString(), this.shortname).pipe(
+          concatMap(set => this.basecampservice.todolists(set.todolists_url, this.shortname)),
+          concatMap(lists => lists.map(list => this.basecampservice.todos(list.todos_url, this.shortname))),
+          concatMap(todo => { console.log(todo); return todo; })
+        ).subscribe(todos => p.todos = todos);
+      }
+    });
   }
 
 

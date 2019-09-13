@@ -32,10 +32,9 @@
                     </div>
                     <div class="project-content">
                         <ul>
-                            <li *ngFor="let set of project.todosets">
-                                {{ set.status }}
-                                {{ set.title }}
-                                {{ set.completed }}
+                            <li *ngFor="let todo of project.todos">
+                                {{ todo.title }}
+                                {{ todo.completed }}
                             </li>
                         </ul>
                     </div>

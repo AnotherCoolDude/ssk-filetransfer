@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/AnotherCoolDude/ssk-filetransfer/proadclient"
-
 	"github.com/AnotherCoolDude/ssk-filetransfer/basecampclient"
 	"github.com/gin-gonic/gin"
 )
@@ -59,6 +57,6 @@ func BCGetContentsByLink(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
-	proadclient.PrettyPrintResponse(resp)
-	// c.DataFromReader(http.StatusOK, resp.ContentLength, "application/json", resp.Body, map[string]string{})
+	// proadclient.PrettyPrintResponse(resp)
+	c.DataFromReader(http.StatusOK, resp.ContentLength, "application/json", resp.Body, map[string]string{})
 }

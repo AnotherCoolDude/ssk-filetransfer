@@ -1,3 +1,6 @@
+import { Todoset } from './todoset';
+import { Todo } from './todo';
+
 export class Project {
     urno: number;
     status: string;
@@ -30,7 +33,8 @@ export class Basecampproject {
         url: URL;
         app_url: URL;
     };
-    todosets: Todoset[];
+    todoset: Todoset;
+    todos: Todo[];
 
     constructor(obj: any) {
         this.id = obj.id;
@@ -48,69 +52,6 @@ export class Basecampproject {
                 this.dock = d;
             }
         }
+        this.todos = [];
     }
-}
-
-export interface Todoset {
-  id: number;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  title: string;
-  inherits_status: boolean;
-  type: string;
-  url: string;
-  app_url: string;
-  comments_count: number;
-  comments_url: string;
-  position: number;
-  parent: Parent;
-  bucket: Bucket;
-  creator: Creator;
-  description: string;
-  bookmark_url: string;
-  subscription_url: string;
-  completed: boolean;
-  content: string;
-  starts_on?: any;
-  due_on?: any;
-  assignees: any[];
-  completion_subscribers: any[];
-  completion_url: string;
-}
-
-export interface Creator {
-  id: number;
-  attachable_sgid: string;
-  name: string;
-  email_address: string;
-  personable_type: string;
-  title: string;
-  bio: string;
-  created_at: string;
-  updated_at: string;
-  admin: boolean;
-  owner: boolean;
-  time_zone: string;
-  avatar_url: string;
-  company: Company;
-}
-
-export interface Company {
-  id: number;
-  name: string;
-}
-
-export interface Bucket {
-  id: number;
-  name: string;
-  type: string;
-}
-
-export interface Parent {
-  id: number;
-  title: string;
-  type: string;
-  url: string;
-  app_url: string;
 }

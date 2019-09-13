@@ -47,7 +47,7 @@ func BCVerifyClient() gin.HandlerFunc {
 		}
 
 		if !basecampclient.Client.TokenValid() {
-			c.Redirect(http.StatusTemporaryRedirect, "/bc/login")
+			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:4200/")
 			c.Abort()
 			return
 		}
