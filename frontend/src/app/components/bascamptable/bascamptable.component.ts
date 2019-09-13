@@ -34,11 +34,24 @@ export class BascamptableComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Basecampproject>();
   expandedProject: Basecampproject | null;
   basecampprojects$: Observable<Basecampproject[]>;
-  shortname = "";
+  shortname = '';
 
 
   ngAfterViewInit() {
    this.basecampprojects$.subscribe(pp => this.dataSource.data = pp);
+
+   this.dataSource.connect().subscribe(pp => {
+     for (const p of pp) {
+       if (!p.todosets) {
+          this.basecampservice
+            .todoset(p.dock.url.toString(), this.shortname)
+            .subscribe(sets => {
+              console.log(sets);
+              p.todosets = sets;
+            });
+       }
+     }
+   });
   }
 
 

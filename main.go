@@ -27,6 +27,7 @@ func main() {
 	basecamp.GET("/valid", handler.BCTokenValidHandler)
 	basecamp.GET("/login", handler.BCLoginhandler)
 	basecamp.GET("/projects", handler.BCGetProjects)
+	basecamp.GET("/link", handler.BCGetContentsByLink)
 
 	r.NoRoute(func(c *gin.Context) {
 		dir, file := path.Split(c.Request.RequestURI)

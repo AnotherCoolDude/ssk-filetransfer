@@ -32,8 +32,10 @@
                     </div>
                     <div class="project-content">
                         <ul>
-                            <li *ngFor="let path of project.content">
-                                {{ path }}
+                            <li *ngFor="let set of project.todosets">
+                                {{ set.status }}
+                                {{ set.title }}
+                                {{ set.completed }}
                             </li>
                         </ul>
                     </div>

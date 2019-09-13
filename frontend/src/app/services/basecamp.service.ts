@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Basecampproject } from '../model/project';
+import { Basecampproject, Todoset } from '../model/project';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +56,9 @@ export class BasecampService {
     );
   }
 
+  todoset(link: string, shortname: string): Observable<Todoset[]> {
+    return this.httpClient.get<Todoset[]>(environment.gateway + '/bc/link', {params: {['shortname']: shortname, ['link']: link }});
+  }
 
 
 }

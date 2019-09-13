@@ -4,38 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/AnotherCoolDude/ssk-filetransfer/proadclient"
+
 	"github.com/AnotherCoolDude/ssk-filetransfer/basecampclient"
 	"github.com/gin-gonic/gin"
 )
-
-// var (
-// 	clientsMap map[string]int
-// )
-
-// func init() {
-// 	clientsMap = map[string]int{}
-// }
-
-// func handleClient(c *gin.Context) error {
-// 	shortname := c.Query("shortname")
-// 	if shortname == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "missing shortname query parameter"})
-// 		return errors.New("missing query parameter: shortname")
-// 	}
-
-// 	if len(clientsMap) == 0 {
-// 		clientsMap[shortname] = 0
-// 		return nil
-// 	}
-
-// 	if _, ok := clientsMap[shortname]; ok {
-// 		basecampclient.ChangeClient(clientsMap[shortname])
-// 		return nil
-// 	}
-// 	clientsMap[shortname] = basecampclient.AddClient()
-// 	basecampclient.ChangeClient(clientsMap[shortname])
-// 	return nil
-// }
 
 // BCLoginhandler redirects to the bascamp auth url
 func BCLoginhandler(c *gin.Context) {
@@ -72,4 +45,20 @@ func BCGetProjects(c *gin.Context) {
 	fmt.Printf("projects requesting client: %+v\n", basecampclient.Client)
 	defer resp.Body.Close()
 	c.DataFromReader(http.StatusOK, resp.ContentLength, "application/json", resp.Body, map[string]string{})
+}
+
+// BCGetContentsByLink returns the content, that is fetchable by the provided link
+func BCGetContentsByLink(c *gin.Context) {
+	link := c.Query("link")
+	if link == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing link parameter in request"})
+		return
+	}
+	resp, err := basecampclient.Client.Do("GET", link, http.NoBody)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+	proadclient.PrettyPrintResponse(resp)
+	// c.DataFromReader(http.StatusOK, resp.ContentLength, "application/json", resp.Body, map[string]string{})
 }
