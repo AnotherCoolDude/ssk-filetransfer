@@ -15,9 +15,11 @@ func main() {
 	r.GET("/callback", handler.BCCallbackhandler)
 
 	proad := r.Group("/proad")
+	proad.Use(middleware.Debug())
 	proad.GET("/employees", handler.GetEmployeesHandler)
 	proad.GET("/projects/:urno", handler.GetProjectsByEmployeeHandler)
 	proad.GET("/projects", handler.GetFilteredProjects)
+	proad.GET("/project", handler.GetProjectByProjectnr)
 
 	files := r.Group("/files")
 	files.GET("/project", handler.GetContentForProject)

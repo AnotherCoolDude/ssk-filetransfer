@@ -39,6 +39,16 @@ func GetFilteredProjects(c *gin.Context) {
 	c.JSON(http.StatusOK, pp)
 }
 
+// GetProjectByProjectnr returns the project defined by query parameter projectnr
+func GetProjectByProjectnr(c *gin.Context) {
+	pp := proadclient.GetProject(c.Query("projectnr"))
+	fmt.Println(c.Request)
+	if len(pp.Projects) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "projectList is empty"})
+	}
+	c.JSON(http.StatusOK, pp)
+}
+
 // GetContentForProject returns the contents for a project
 func GetContentForProject(c *gin.Context) {
 	prnr := c.Query("projectnr")

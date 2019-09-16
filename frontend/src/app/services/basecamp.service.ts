@@ -68,7 +68,7 @@ export class BasecampService {
 
   todos(link: string, shortname: string): Observable<Todo[]> {
     return this.httpClient.get<Todo[]>(environment.gateway + '/bc/link', {params: {['shortname']: shortname, ['link']: link }}).pipe(
-      map(tt => { console.log(tt); return tt; })
+      map(tt => tt)
     );
   }
 

@@ -51,3 +51,11 @@ func GetProjects(code StatusCode, startDate, endDate time.Time) *ProjectList {
 	unmarshalResponse(req, &pl)
 	return &pl
 }
+
+// GetProject returns a projectlist with a single project defined by projectnr
+func GetProject(projectnr string) *ProjectList {
+	var pl ProjectList
+	req := makeGETRequest("projects", queryMap(StatusNone, queryPair{key: "projectno", value: projectnr}))
+	unmarshalResponse(req, &pl)
+	return &pl
+}

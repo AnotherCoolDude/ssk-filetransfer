@@ -1,5 +1,6 @@
 import { Todoset } from './todoset';
 import { Todo } from './todo';
+import { splitAtColon } from '@angular/compiler/src/util';
 
 export class Project {
     urno: number;
@@ -15,6 +16,7 @@ export class Project {
 
 export class Basecampproject {
     id: number;
+    projectnr: string;
     status: string;
     createdAt: Date;
     updatedAt: Date;
@@ -53,5 +55,6 @@ export class Basecampproject {
             }
         }
         this.todos = [];
+        this.projectnr = this.name.split(' ')[0];
     }
 }

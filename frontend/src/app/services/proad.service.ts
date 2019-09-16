@@ -90,6 +90,20 @@ export class ProadService {
     );
   }
 
+  getProjectByProjectnr(projectnr: string): Observable<Project> {
+    let prnrParam = new HttpParams();
+    prnrParam = prnrParam.append('projectnr', projectnr);
+    return this.httpClient.get<Project>(environment.gateway + '/proad/project', {params: prnrParam}).pipe(
+      map((projectlist: any) => {
+        if (projectlist.error) {
+          console.log(projectlist.error);
+          return new Project();
+        }
+        return projectlist.project_list[0];
+      })
+    );
+  }
+
   getContentForProject(projectnr: string): Observable<string[]> {
     let prnrParam = new HttpParams();
     prnrParam = prnrParam.append('projectnr', projectnr);

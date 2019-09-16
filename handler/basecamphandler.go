@@ -29,7 +29,6 @@ func BCTokenValidHandler(c *gin.Context) {
 func BCCallbackhandler(c *gin.Context) {
 	basecampclient.Client.HandleCallback(c.Request)
 	basecampclient.Client.ReceiveID()
-	fmt.Printf("client after callback %+v\n", basecampclient.Client)
 	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:4200/basecamptable/HOVE")
 }
 
@@ -40,7 +39,6 @@ func BCGetProjects(c *gin.Context) {
 		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
-	fmt.Printf("projects requesting client: %+v\n", basecampclient.Client)
 	defer resp.Body.Close()
 	c.DataFromReader(http.StatusOK, resp.ContentLength, "application/json", resp.Body, map[string]string{})
 }
@@ -57,6 +55,5 @@ func BCGetContentsByLink(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
-	// proadclient.PrettyPrintResponse(resp)
 	c.DataFromReader(http.StatusOK, resp.ContentLength, "application/json", resp.Body, map[string]string{})
 }

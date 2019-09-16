@@ -4,10 +4,11 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FilterbarComponent, Filterdata } from '../filterbar/filterbar.component';
 import { Project, Basecampproject } from 'src/app/model/project';
 import { BasecampService } from 'src/app/services/basecamp.service';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { mergeMap, map, reduce, switchMap, concatMap } from 'rxjs/operators';
+import { mergeMap, map, reduce, switchMap, concatMap, mergeAll } from 'rxjs/operators';
 import { Todo } from 'src/app/model/todo';
+import { ProadService } from 'src/app/services/proad.service';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class BascamptableComponent implements OnInit, AfterViewInit {
 
   constructor(
     private basecampservice: BasecampService,
+    private proadservice: ProadService,
     private route: ActivatedRoute) { }
 
   displayedColumns: string[] = ['status', 'name', 'purpose'];
@@ -44,14 +46,14 @@ export class BascamptableComponent implements OnInit, AfterViewInit {
 
     this.dataSource.connect().subscribe(pp => {
       for (const p of pp) {
-        if (p.todos.length > 0) {
-          return;
-        }
-        this.basecampservice.todoset(p.url.toString(), this.shortname).pipe(
-          concatMap(set => this.basecampservice.todolists(set.todolists_url, this.shortname)),
-          concatMap(lists => lists.map(list => this.basecampservice.todos(list.todos_url, this.shortname))),
-          concatMap(todo => { console.log(todo); return todo; })
-        ).subscribe(todos => p.todos = todos);
+        this.basecampservice.todoset(p.dock.url.toString(), this.shortname).pipe(
+          mergeMap(set => this.basecampservice.todolists(set.todolists_url, this.shortname)),
+          mergeMap(lists => lists.map(list => this.basecampservice.todos(list.todos_url, this.shortname))),
+          mergeAll()
+        ).subscribe(todos => p.todos = p.todos.concat(todos));
+        console.log(p.projectnr);
+        this.proadservice.getProjectByProjectnr(p.projectnr).subscribe(content => console.log(content));
+
       }
     });
   }

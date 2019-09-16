@@ -17,6 +17,15 @@ func init() {
 	clientsMap = map[string]int{}
 }
 
+// Debug prints out information
+func Debug() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		fmt.Printf("[middleware/Debug()] sending request with url: %s\n", c.Request.URL.String())
+		c.Next()
+		return
+	}
+}
+
 // BCVerifyClient verifies the client based on the provided shortname
 func BCVerifyClient() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -38,8 +47,6 @@ func BCVerifyClient() gin.HandlerFunc {
 			basecampclient.ChangeClient(clientsMap[shortname])
 		}
 
-		fmt.Printf("current client: %+v\n", basecampclient.Client)
-		fmt.Println(c.HandlerName())
 		if strings.Contains(c.HandlerName(), "BCLoginhandler") {
 			fmt.Println("try to connect to login handler, letting through")
 			c.Next()
@@ -54,7 +61,6 @@ func BCVerifyClient() gin.HandlerFunc {
 
 		if !basecampclient.Client.IDValid() {
 			basecampclient.Client.ReceiveID()
-			fmt.Printf("updated client: %+v\n", basecampclient.Client)
 		}
 
 		c.Next()

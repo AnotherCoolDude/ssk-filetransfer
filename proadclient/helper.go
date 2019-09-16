@@ -21,6 +21,7 @@ func makeGETRequest(relURL string, query map[string]string) *http.Request {
 		q.Add(key, value)
 	}
 	req.URL.RawQuery = q.Encode()
+	fmt.Println(req.URL)
 	return req
 }
 
