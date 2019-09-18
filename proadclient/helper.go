@@ -34,13 +34,13 @@ func makeFilteredGetRequest(path string, code StatusCode, startDate, endDate tim
 
 func makePOSTRequest(relURL string, body io.Reader) *http.Request {
 	req := makeRequest("POST", relURL, map[string]string{}, body)
-	req.Header.Add("content-type", "application/json")
+	req.Header.Add("Content-type", "application/json")
 	return req
 }
 
 func makePUTRequest(relURL string, urno int, body io.Reader) *http.Request {
 	req := makeRequest("PUT", relURL+"/"+strconv.Itoa(urno), map[string]string{}, body)
-	req.Header.Add("content-type", "application/json")
+	req.Header.Add("Content-type", "application/json")
 	return req
 }
 
