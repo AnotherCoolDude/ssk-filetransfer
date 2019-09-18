@@ -4,24 +4,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
 
 func makeGETRequest(relURL string, query map[string]string) *http.Request {
-	req, err := http.NewRequest("GET", BaseURL+relURL, http.NoBody)
-	if err != nil {
-		fmt.Printf("[proadclient/helper.go/makeGETRequest] error: %s\n", err.Error())
-		return &http.Request{}
-	}
-	q := req.URL.Query()
-	for key, value := range query {
-		q.Add(key, value)
-	}
-	req.URL.RawQuery = q.Encode()
-	fmt.Println(req.URL)
+	req := makeRequest("GET", relURL, query, http.NoBody)
 	return req
 }
 
@@ -37,6 +29,32 @@ func makeFilteredGetRequest(path string, code StatusCode, startDate, endDate tim
 		value: startDate.Format(proadTimeFormat) + "--" + endDate.Format(proadTimeFormat),
 	}
 	req := makeGETRequest(path, queryMap(code, q))
+	return req
+}
+
+func makePOSTRequest(relURL string, body io.Reader) *http.Request {
+	req := makeRequest("POST", relURL, map[string]string{}, body)
+	req.Header.Add("content-type", "application/json")
+	return req
+}
+
+func makePUTRequest(relURL string, urno int, body io.Reader) *http.Request {
+	req := makeRequest("PUT", relURL+"/"+strconv.Itoa(urno), map[string]string{}, body)
+	req.Header.Add("content-type", "application/json")
+	return req
+}
+
+func makeRequest(method, relURL string, query map[string]string, body io.Reader) *http.Request {
+	req, err := http.NewRequest(method, BaseURL+relURL, body)
+	if err != nil {
+		fmt.Printf("[proadclient/helper.go/makeRequest] error: %s\n", err.Error())
+		return &http.Request{}
+	}
+	q := req.URL.Query()
+	for key, value := range query {
+		q.Add(key, value)
+	}
+	req.URL.RawQuery = q.Encode()
 	return req
 }
 

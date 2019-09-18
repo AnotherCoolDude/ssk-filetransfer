@@ -1,6 +1,7 @@
 package proadclient
 
 import (
+	"strconv"
 	"time"
 )
 
@@ -58,4 +59,12 @@ func GetProject(projectnr string) *ProjectList {
 	req := makeGETRequest("projects", queryMap(StatusNone, queryPair{key: "projectno", value: projectnr}))
 	unmarshalResponse(req, &pl)
 	return &pl
+}
+
+// GetTasksForProject returns a tasklist for the given project
+func GetTasksForProject(project *Project) *TaskList {
+	var tl TaskList
+	req := makeGETRequest("tasks", queryMap(StatusNone, queryPair{key: "project", value: strconv.Itoa(project.Urno)}))
+	unmarshalResponse(req, &tl)
+	return &tl
 }
