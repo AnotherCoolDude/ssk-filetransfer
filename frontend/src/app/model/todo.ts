@@ -1,4 +1,5 @@
 import { Parent, Bucket, Creator } from './general';
+import { Task } from './task';
 
 export interface Todo {
   id: number;

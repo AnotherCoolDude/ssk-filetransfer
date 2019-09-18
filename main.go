@@ -21,6 +21,9 @@ func main() {
 	proad.GET("/projects", handler.GetFilteredProjects)
 	proad.GET("/project", handler.GetProjectByProjectnr)
 
+	proad.POST("/tasks", handler.PostTask)
+	proad.PUT("/tasks", handler.PutTask)
+
 	files := r.Group("/files")
 	files.GET("/project", handler.GetContentForProject)
 

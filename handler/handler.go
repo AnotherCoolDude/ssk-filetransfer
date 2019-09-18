@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/AnotherCoolDude/ssk-filetransfer/filemanagement"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
@@ -68,6 +70,50 @@ func GetFilteredTasks(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "taskList is empty"})
 	}
 	c.JSON(http.StatusOK, tt)
+}
+
+// PostTask creates a new Task provided in the reqeust's body
+func PostTask(c *gin.Context) {
+	var t proadclient.Task
+	pBytes, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	defer c.Request.Body.Close()
+	err = json.Unmarshal(pBytes, &t)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err = proadclient.PostTask(&t)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, t)
+}
+
+//PutTask updates the task provided in the request's body
+func PutTask(c *gin.Context) {
+	var t proadclient.Task
+	pBytes, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	defer c.Request.Body.Close()
+	err = json.Unmarshal(pBytes, &t)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err = proadclient.PutTask(&t)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, t)
 }
 
 func extractFilterParameter(c *gin.Context) (code proadclient.StatusCode, startDate, endDate time.Time) {
