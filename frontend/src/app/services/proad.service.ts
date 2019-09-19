@@ -16,6 +16,7 @@ export class ProadService {
   private projectdataChanged = true;
   private cachedEmployees: Employee[];
   private cachedProjects: Project[];
+  currentEmployee: Employee;
 
   constructor(private httpClient: HttpClient) { }
 

@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
       if (ee.length === 1) {
         console.log(ee[0]);
         this.proadService.dataHasChanged();
+        this.proadService.currentEmployee = ee[0];
         this.router.navigate(['/filetransfertable/' + ee[0].urno]);
       }
     }
