@@ -23,9 +23,9 @@ var (
 func init() {
 	clients = []*Basecampclient{}
 	Client = new(
-		"34a8b658744a7f190a03765149bbcf2282161add",
-		"d0736bffee7d2be41f2f8f277a8a01b944912b4d",
-		"christian.hovenbitzer@selinka-schmitz.de",
+		"XXX",
+		"XXX",
+		"XXX",
 		"ProadInterface",
 		"http://localhost:3000/callback",
 	)
