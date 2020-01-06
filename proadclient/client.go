@@ -8,7 +8,7 @@ import (
 )
 
 // apikey is needed for initializing the proad client
-const apikey = "daa80e5383c27ce5c0c5434bbc699618960c67d0e26002e53a71d961c7091844d0ffbac4d643c4e2fa3eb98ee8c5bd2e4b817b4e4ac94224d4e590d687d0fd65"
+const apikey = "XXX"
 
 // BaseURL defines the baseURL to the proad server
 const BaseURL = "https://192.168.0.15/api/v5/"
